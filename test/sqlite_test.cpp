@@ -6,8 +6,16 @@
  */
 
 
-int main() {
+#include <cassert>
 
+#include "sqlite3.h"
+
+int main() {
+    sqlite3 *db;
+    auto rc = sqlite3_open("test.db", &db);
+    assert(!rc);
+    sqlite3_close(db);
+    
     return 0;
 }
 
