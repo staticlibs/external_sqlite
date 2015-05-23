@@ -28,10 +28,12 @@ include ( ${CMAKE_CURRENT_LIST_DIR}/cmake/staticlibs_common.cmake )
 if ( CMAKE_BUILD_TYPE MATCHES "Debug" )
     set ( ${PROJECT_NAME}_CFLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG}" )
     set ( ${PROJECT_NAME}_DEBUG "--enable-debug" )
+    set ( ${PROJECT_NAME}_DEBUG_WINDOWS "2" )
 endif ( )
 if ( CMAKE_BUILD_TYPE MATCHES "Release" )
     set ( ${PROJECT_NAME}_CFLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_RELEASE}" )
     set ( ${PROJECT_NAME}_DEBUG "--disable-debug" )
+    set ( ${PROJECT_NAME}_DEBUG_WINDOWS "0" )
 endif ( )
 
 # library config

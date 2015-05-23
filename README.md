@@ -32,6 +32,8 @@ from the development shell `C:\Program Files (x86)\Microsoft Visual Studio 12.0\
     nmake
     nmake test
 
+GNU Awk and Tcl/Tk are required for builds on Windows.
+
 License information
 -------------------
 

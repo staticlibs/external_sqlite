@@ -29,6 +29,7 @@
 int main() {
     sqlite3 *db;
     auto rc = sqlite3_open("test.db", &db);
+    (void) rc;
     assert(!rc);
     sqlite3_close(db);
     
