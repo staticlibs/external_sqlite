@@ -10,7 +10,7 @@ with `STATICLIB_TOOLCHAIN` option and exports sqlite headers to be used from dep
 [SQLite unofficial GitHub repository](https://github.com/mackyle/sqlite) is used as a git submodule of this project.
 SQLite pinned to version 3.8.8.2.
 
-Link to [API documentation](http://log4cplus.sourceforge.net/docs/html/).
+Link to [API documentation](https://www.sqlite.org/c3ref/intro.html).
 
 How to build
 ------------
@@ -44,4 +44,4 @@ Changelog
 
 **2015-05-22**
 
- * 1.1.2, initial public version
+ * 3.8.8.2, initial public version
