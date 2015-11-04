@@ -1,6 +1,3 @@
 [submodule "sqlite"]
 	path = sqlite
 	url = https://github.com/mackyle/sqlite.git
-[submodule "cmake"]
-	path = cmake
-	url = ../cmake.git

@@ -20,7 +20,7 @@ set ( CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_LIST_DIR}/cmake/toolchains/${STATICLI
 
 # project setup
 project ( external_sqlite C CXX )
-set ( ${PROJECT_NAME}_STATICLIB_VERSION 3.8.8.2.2 )
+set ( ${PROJECT_NAME}_STATICLIB_VERSION 3.8.8.2.3 )
 # common include
 include ( ${CMAKE_CURRENT_LIST_DIR}/cmake/staticlibs_common.cmake )
 
