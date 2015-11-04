@@ -14,17 +14,12 @@
 
 cmake_minimum_required ( VERSION 2.8.12 )
 
-# toolchain setup
-set ( STATICLIB_TOOLCHAIN linux_amd64_gcc CACHE STRING "toolchain triplet" )
-set ( CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_LIST_DIR}/cmake/toolchains/${STATICLIB_TOOLCHAIN}.cmake CACHE INTERNAL "" )
-
-# project setup
 project ( external_sqlite C CXX )
 set ( ${PROJECT_NAME}_STATICLIB_VERSION 3.8.8.2.3 )
-# common include
-include ( ${CMAKE_CURRENT_LIST_DIR}/cmake/staticlibs_common.cmake )
+set ( ${PROJECT_NAME}_DESCRIPTION "SQLite library build for Staticlibs" )
+set ( ${PROJECT_NAME}_URL https://github.com/staticlibs/external_sqlite.git )
 
-# variabled for makefiles
+# variables for makefiles
 if ( CMAKE_BUILD_TYPE MATCHES "Debug" )
     set ( ${PROJECT_NAME}_CFLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG}" )
     set ( ${PROJECT_NAME}_DEBUG "--enable-debug" )
@@ -37,24 +32,29 @@ if ( CMAKE_BUILD_TYPE MATCHES "Release" )
 endif ( )
 
 # library config
-configure_file ( ${CMAKE_CURRENT_LIST_DIR}/Makefile-${STATICLIB_TOOLCHAIN}
+if ( NOT DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY )
+    set ( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
+endif ( )
+configure_file ( ${CMAKE_CURRENT_LIST_DIR}/resources/Makefile-${STATICLIB_TOOLCHAIN}
         ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${STATICLIB_TOOLCHAIN})
-add_custom_target( ${PROJECT_NAME}_build
-        COMMAND ${CMAKE_MAKE_PROGRAM} -f ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${STATICLIB_TOOLCHAIN})
-add_library( ${PROJECT_NAME} STATIC IMPORTED GLOBAL )
+if ( STATICLIB_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
+    set ( ${PROJECT_NAME}_MAKE_PROGRAM nmake )
+else ( )
+    set ( ${PROJECT_NAME}_MAKE_PROGRAM make )
+endif ( )
+add_custom_target( ${PROJECT_NAME} ALL
+        COMMAND ${${PROJECT_NAME}_MAKE_PROGRAM} -f ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${STATICLIB_TOOLCHAIN})
+add_library( sqlite STATIC IMPORTED GLOBAL )
 set_target_properties( ${PROJECT_NAME} PROPERTIES IMPORTED_LOCATION 
         ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libsqlite3${CMAKE_STATIC_LIBRARY_SUFFIX} )
-add_dependencies( ${PROJECT_NAME} ${PROJECT_NAME}_build )
-set ( ${PROJECT_NAME}_INCLUDES ${CMAKE_CURRENT_BINARY_DIR}/sqlite )
+add_dependencies( sqlite ${PROJECT_NAME} )
 
-# tests
-set ( ${PROJECT_NAME}_TEST_INCLUDES ${${PROJECT_NAME}_INCLUDES} )
-set ( ${PROJECT_NAME}_TEST_LIBS ${PROJECT_NAME} )
-set ( ${PROJECT_NAME}_TEST_OPTS "" )
-if ( STATICLIB_TOOLCHAIN MATCHES "(linux|macosx|ios)_[^_]+_[^_]+" )
-    set ( ${PROJECT_NAME}_TEST_LIBS ${${PROJECT_NAME}_TEST_LIBS} pthread )
+# pkg-config
+set ( ${PROJECT_NAME}_MODULE sqlite )
+set ( ${PROJECT_NAME}_PC_CFLAGS "-I${CMAKE_CURRENT_BINARY_DIR}/sqlite" )
+set ( ${PROJECT_NAME}_PC_LIBS "-L${CMAKE_LIBRARY_OUTPUT_DIRECTORY} -lsqlite3" )
+if ( CMAKE_SYSTEM_NAME MATCHES "Linux" )
+    set ( ${PROJECT_NAME}_PC_LIBS "${${PROJECT_NAME}_PC_LIBS} -lpthread" )
 endif ( )
-staticlib_enable_testing ( ${PROJECT_NAME}_TEST_INCLUDES ${PROJECT_NAME}_TEST_LIBS ${PROJECT_NAME}_TEST_OPTS )
-
-# headers export
-set ( ${PROJECT_NAME}_INCLUDES ${${PROJECT_NAME}_INCLUDES} CACHE INTERNAL "" )
+configure_file ( ${CMAKE_CURRENT_LIST_DIR}/resources/pkg-config.in 
+        ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/pkgconfig/sqlite.pc )
