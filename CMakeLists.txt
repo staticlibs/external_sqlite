@@ -30,6 +30,9 @@ if ( CMAKE_BUILD_TYPE MATCHES "Release" )
     set ( ${PROJECT_NAME}_DEBUG "--disable-debug" )
     set ( ${PROJECT_NAME}_DEBUG_WINDOWS "0" )
 endif ( )
+if ( NOT DEFINED ${PROJECT_NAME}_DEBUG_WINDOWS )
+    set ( ${PROJECT_NAME}_DEBUG_WINDOWS "0" )
+endif ( )
 
 # library config
 if ( NOT DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY )
@@ -44,10 +47,10 @@ else ( )
 endif ( )
 add_custom_target( ${PROJECT_NAME} ALL
         COMMAND ${${PROJECT_NAME}_MAKE_PROGRAM} -f ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${STATICLIB_TOOLCHAIN})
-add_library( sqlite STATIC IMPORTED GLOBAL )
-set_target_properties( ${PROJECT_NAME} PROPERTIES IMPORTED_LOCATION 
+add_library( sqlite3 STATIC IMPORTED GLOBAL )
+set_target_properties( sqlite3 PROPERTIES IMPORTED_LOCATION 
         ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libsqlite3${CMAKE_STATIC_LIBRARY_SUFFIX} )
-add_dependencies( sqlite ${PROJECT_NAME} )
+add_dependencies( sqlite3 ${PROJECT_NAME} )
 
 # pkg-config
 set ( ${PROJECT_NAME}_MODULE sqlite )
