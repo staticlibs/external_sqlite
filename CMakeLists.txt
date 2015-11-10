@@ -15,9 +15,23 @@
 cmake_minimum_required ( VERSION 2.8.12 )
 
 project ( external_sqlite C CXX )
-set ( ${PROJECT_NAME}_STATICLIB_VERSION 3.8.8.2.3 )
+set ( ${PROJECT_NAME}_STATICLIB_VERSION 3.8.8.2.4 )
 set ( ${PROJECT_NAME}_DESCRIPTION "SQLite library build for Staticlibs" )
 set ( ${PROJECT_NAME}_URL https://github.com/staticlibs/external_sqlite.git )
+
+# copy files
+file ( COPY ${CMAKE_CURRENT_LIST_DIR}/sqlite
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+# copy manifests
+file ( COPY ${CMAKE_CURRENT_LIST_DIR}/resources/manifests/manifest 
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/sqlite )
+file ( COPY ${CMAKE_CURRENT_LIST_DIR}/resources/manifests/manifest.uuid 
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/sqlite )
+
+if ( STATICLIB_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
+    file ( COPY ${CMAKE_CURRENT_LIST_DIR}/resources/windows/Makefile.msc
+            DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/sqlite )
+endif ( )
 
 # variables for makefiles
 if ( CMAKE_BUILD_TYPE MATCHES "Debug" )
@@ -38,15 +52,23 @@ endif ( )
 if ( NOT DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY )
     set ( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
 endif ( )
+# copy makefile
 configure_file ( ${CMAKE_CURRENT_LIST_DIR}/resources/Makefile-${STATICLIB_TOOLCHAIN}
         ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${STATICLIB_TOOLCHAIN})
 if ( STATICLIB_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
     set ( ${PROJECT_NAME}_MAKE_PROGRAM nmake )
 else ( )
-    set ( ${PROJECT_NAME}_MAKE_PROGRAM make )
+    set ( ${PROJECT_NAME}_MAKE_PROGRAM ${CMAKE_MAKE_PROGRAM} )
 endif ( )
-add_custom_target( ${PROJECT_NAME} ALL
-        COMMAND ${${PROJECT_NAME}_MAKE_PROGRAM} -f ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${STATICLIB_TOOLCHAIN})
+
+# run configure
+execute_process ( COMMAND ${${PROJECT_NAME}_MAKE_PROGRAM}
+        -f ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${STATICLIB_TOOLCHAIN} configure
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
+# add build target
+add_custom_target( ${PROJECT_NAME} ALL COMMAND ${${PROJECT_NAME}_MAKE_PROGRAM} 
+        -f ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${STATICLIB_TOOLCHAIN} build
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
 add_library( sqlite3 STATIC IMPORTED GLOBAL )
 set_target_properties( sqlite3 PROPERTIES IMPORTED_LOCATION 
         ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libsqlite3${CMAKE_STATIC_LIBRARY_SUFFIX} )

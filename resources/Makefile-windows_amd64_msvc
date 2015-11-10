@@ -12,12 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-all:
-	@if exist "${CMAKE_CURRENT_BINARY_DIR}/sqlite" echo "flag" > "${CMAKE_CURRENT_BINARY_DIR}/sqlite_exists.flag"
-	@if exist "${CMAKE_CURRENT_BINARY_DIR}/sqlite_exists.flag" echo "[${CMAKE_CURRENT_BINARY_DIR}/sqlite] directory found, skipping build"
-	@if not exist "${CMAKE_CURRENT_BINARY_DIR}/sqlite_exists.flag" xcopy /s /i /q "${CMAKE_CURRENT_LIST_DIR}/sqlite" "${CMAKE_CURRENT_BINARY_DIR}/sqlite"
-	@if not exist "${CMAKE_CURRENT_BINARY_DIR}/sqlite_exists.flag" echo f | xcopy /f /y "${CMAKE_CURRENT_LIST_DIR}/resources/manifests/manifest" "${CMAKE_CURRENT_BINARY_DIR}/sqlite"
-	@if not exist "${CMAKE_CURRENT_BINARY_DIR}/sqlite_exists.flag" echo f | xcopy /f /y "${CMAKE_CURRENT_LIST_DIR}/resources/manifests/manifest.uuid" "${CMAKE_CURRENT_BINARY_DIR}/sqlite"
-	@if not exist "${CMAKE_CURRENT_BINARY_DIR}/sqlite_exists.flag" echo f | xcopy /f /y "${CMAKE_CURRENT_LIST_DIR}/resources/windows/Makefile.msc" "${CMAKE_CURRENT_BINARY_DIR}/sqlite"	
-    @if not exist "${CMAKE_CURRENT_BINARY_DIR}/sqlite_exists.flag" pushd "${CMAKE_CURRENT_BINARY_DIR}/sqlite" & nmake DEBUG=${${PROJECT_NAME}_DEBUG_WINDOWS} NO_TCL=1 /nologo -f Makefile.msc & popd
-	@if not exist "${CMAKE_CURRENT_BINARY_DIR}/sqlite_exists.flag" echo f | xcopy /f /y "${CMAKE_CURRENT_BINARY_DIR}/sqlite/libsqlite3.lib" "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libsqlite3.lib"
+configure:
+
+build:
+	@if exist sqlite_flag echo "[${CMAKE_CURRENT_BINARY_DIR}/sqlite_flag] found, skipping build"	
+	@if not exist sqlite_flag pushd sqlite & nmake DEBUG=${${PROJECT_NAME}_DEBUG_WINDOWS} NO_TCL=1 /nologo -f Makefile.msc & popd
+	@if not exist sqlite_flag echo f | xcopy /f /y "sqlite/libsqlite3.lib" "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libsqlite3.lib"
+	@if not exist sqlite_flag echo "flag" > sqlite_flag
