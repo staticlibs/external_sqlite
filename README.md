@@ -28,7 +28,7 @@ Visual Studio development command prompt
     cd external_sqlite
     mkdir build
     cd build
-    cmake .. -DSTATICLIB_TOOLCHAIN=windows_i386_msvc
+    cmake ..
     msbuild external_sqlite.sln
 
 See [StaticlibsToolchains](https://github.com/staticlibs/wiki/wiki/StaticlibsToolchains) for 
