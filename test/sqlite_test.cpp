@@ -22,17 +22,26 @@
  */
 
 
-#include <cassert>
+#include <iostream>
 
 #include "sqlite3.h"
 
-int main() {
+#include "staticlib/config/assert.hpp"
+
+
+void test_sqlite() {
     sqlite3 *db;
     auto rc = sqlite3_open("test.db", &db);
-    (void) rc;
-    assert(!rc);
+    slassert(!rc);
     sqlite3_close(db);
-    
-    return 0;
 }
 
+int main() {
+    try {
+        test_sqlite();
+    } catch (const std::exception& e) {
+        std::cout << e.what() << std::endl;
+        return 1;
+    }
+    return 0;
+}

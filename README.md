@@ -9,7 +9,7 @@ Wrapper uses `Makefile`s for each supported platform.
 [SQLite unofficial GitHub repository](https://github.com/mackyle/sqlite) is used as a git submodule of this project.
 SQLite pinned to version 3.8.8.2.
 
-Link to [API documentation](https://www.sqlite.org/c3ref/intro.html).
+Link to the [API documentation](https://www.sqlite.org/c3ref/intro.html).
 
 How to build
 ------------
@@ -41,6 +41,11 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 
 Changelog
 ---------
+
+**2016-01-16**
+
+ * version 3.8.8.2.5
+ * minor CMake changes
 
 **2015-11-10**
 
