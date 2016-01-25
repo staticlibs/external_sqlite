@@ -171,6 +171,8 @@ PROGRAMFILES_X86 = $(PROGRAMFILES_X86:\\=\)
 CC = cl.exe
 !ENDIF
 
+CC = $(CC) ${${PROJECT_NAME}_CFLAGS}
+
 # Check for the command macro LD.  This should point to the linker binary for
 # the target platform.  If it is not defined, simply define it to the legacy
 # default value 'link.exe'.
@@ -317,11 +319,11 @@ BCC = $(BCC) -MD
 !ENDIF
 !ELSE
 !IF $(DEBUG)>1
-TCC = $(TCC) -MTd
-BCC = $(BCC) -MTd
+TCC = $(TCC)
+BCC = $(BCC)
 !ELSE
-TCC = $(TCC) -MT
-BCC = $(BCC) -MT
+TCC = $(TCC)
+BCC = $(BCC)
 !ENDIF
 !ENDIF
 
@@ -352,9 +354,9 @@ MKSQLITE3C_ARGS =
 # includes extra comments when "EXPLAIN stmt" is used.
 #
 !IF $(DEBUG)==0
-TCC = $(TCC) -DNDEBUG
-BCC = $(BCC) -DNDEBUG
-RCC = $(RCC) -DNDEBUG
+TCC = $(TCC)
+BCC = $(BCC)
+RCC = $(RCC)
 !ENDIF
 
 !IF $(DEBUG)>0
@@ -516,33 +518,33 @@ RCC = $(RCC) $(OPTS)
 # If compiling for debugging, add some defines.
 #
 !IF $(DEBUG)>1
-TCC = $(TCC) -D_DEBUG
-BCC = $(BCC) -D_DEBUG
-RCC = $(RCC) -D_DEBUG
+TCC = $(TCC)
+BCC = $(BCC)
+RCC = $(RCC)
 !ENDIF
 
 # If optimizations are enabled or disabled (either implicitly or
 # explicitly), add the necessary flags.
 #
 !IF $(DEBUG)>1 || $(OPTIMIZATIONS)==0
-TCC = $(TCC) -Od
-BCC = $(BCC) -Od
+TCC = $(TCC)
+BCC = $(BCC)
 !ELSEIF $(OPTIMIZATIONS)>=3
-TCC = $(TCC) -Ox
-BCC = $(BCC) -Ox
+TCC = $(TCC)
+BCC = $(BCC)
 !ELSEIF $(OPTIMIZATIONS)==2
-TCC = $(TCC) -O2
-BCC = $(BCC) -O2
+TCC = $(TCC)
+BCC = $(BCC) 
 !ELSEIF $(OPTIMIZATIONS)==1
-TCC = $(TCC) -O1
-BCC = $(BCC) -O1
+TCC = $(TCC)
+BCC = $(BCC)
 !ENDIF
 
 # If symbols are enabled (or compiling for debugging), enable PDBs.
 #
 !IF $(DEBUG)>1 || $(SYMBOLS)!=0
-TCC = $(TCC) -Zi
-BCC = $(BCC) -Zi
+TCC = $(TCC)
+BCC = $(BCC)
 !ENDIF
 
 # If ICU support is enabled, add the compiler options for it.

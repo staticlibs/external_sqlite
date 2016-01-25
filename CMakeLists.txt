@@ -43,6 +43,20 @@ else ( )
     set ( ${PROJECT_NAME}_TOOLCHAIN ${STATICLIB_TOOLCHAIN} )
 endif ( )
 
+# variables for makefiles
+if ( CMAKE_BUILD_TYPE MATCHES "Release" )
+    set ( ${PROJECT_NAME}_CFLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_RELEASE}" )
+    set ( ${PROJECT_NAME}_DEBUG "--disable-debug" )
+    set ( ${PROJECT_NAME}_DEBUG_WINDOWS "0" )
+else ( )
+    set ( ${PROJECT_NAME}_CFLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG}" )
+    set ( ${PROJECT_NAME}_DEBUG "--enable-debug" )
+    set ( ${PROJECT_NAME}_DEBUG_WINDOWS "2" )
+endif ( )
+if ( NOT DEFINED ${PROJECT_NAME}_DEBUG_WINDOWS )
+    set ( ${PROJECT_NAME}_DEBUG_WINDOWS "0" )
+endif ( )
+
 # copy files
 file ( COPY ${CMAKE_CURRENT_LIST_DIR}/sqlite
         DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
@@ -51,25 +65,9 @@ file ( COPY ${CMAKE_CURRENT_LIST_DIR}/resources/manifests/manifest
         DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/sqlite )
 file ( COPY ${CMAKE_CURRENT_LIST_DIR}/resources/manifests/manifest.uuid 
         DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/sqlite )
-
 if ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
-    file ( COPY ${CMAKE_CURRENT_LIST_DIR}/resources/windows/Makefile.msc
-            DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/sqlite )
-endif ( )
-
-# variables for makefiles
-if ( CMAKE_BUILD_TYPE MATCHES "Debug" )
-    set ( ${PROJECT_NAME}_CFLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG}" )
-    set ( ${PROJECT_NAME}_DEBUG "--enable-debug" )
-    set ( ${PROJECT_NAME}_DEBUG_WINDOWS "2" )
-endif ( )
-if ( CMAKE_BUILD_TYPE MATCHES "Release" )
-    set ( ${PROJECT_NAME}_CFLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_RELEASE}" )
-    set ( ${PROJECT_NAME}_DEBUG "--disable-debug" )
-    set ( ${PROJECT_NAME}_DEBUG_WINDOWS "0" )
-endif ( )
-if ( NOT DEFINED ${PROJECT_NAME}_DEBUG_WINDOWS )
-    set ( ${PROJECT_NAME}_DEBUG_WINDOWS "0" )
+    configure_file ( ${CMAKE_CURRENT_LIST_DIR}/resources/windows/Makefile.msc
+            ${CMAKE_CURRENT_BINARY_DIR}/sqlite/Makefile.msc )
 endif ( )
 
 # copy makefile
