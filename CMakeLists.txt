@@ -83,6 +83,19 @@ endif ( )
 execute_process ( COMMAND ${${PROJECT_NAME}_MAKE_PROGRAM}
         -f ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${${PROJECT_NAME}_TOOLCHAIN} configure
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
+
+# check deplibs cache
+if ( STATICLIB_USE_DEPLIBS_CACHE )
+    set ( ${PROJECT_NAME}_CACHED_LIB_PATH ${STATICLIB_DEPLIBS_CACHE_DIR}/libsqlite3${CMAKE_STATIC_LIBRARY_SUFFIX} )
+    if ( EXISTS ${${PROJECT_NAME}_CACHED_LIB_PATH} )
+        add_library( sqlite3 STATIC IMPORTED GLOBAL )
+        set_target_properties( sqlite3 PROPERTIES IMPORTED_LOCATION ${${PROJECT_NAME}_CACHED_LIB_PATH} )
+        add_custom_target( ${PROJECT_NAME} )
+        message ( STATUS "Using cached library: [${${PROJECT_NAME}_CACHED_LIB_PATH}]" )
+        return ( )
+    endif ( )
+endif ( )
+
 # add build target
 add_custom_target( ${PROJECT_NAME} ALL COMMAND ${${PROJECT_NAME}_MAKE_PROGRAM} 
         -f ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${${PROJECT_NAME}_TOOLCHAIN} build
