@@ -4,10 +4,7 @@ SQLite library build for Staticlibs
 This project is a part of [Staticlibs](http://staticlibs.net/).
 
 This project contains a CMake wrapper for the [sqlite library](https://www.sqlite.org/). 
-Wrapper uses `Makefile`s for each supported platform.
-
-[SQLite unofficial GitHub repository](https://github.com/mackyle/sqlite) is used as a git submodule of this project.
-SQLite pinned to version 3.8.8.2.
+SQLite sources [amalgamation](https://sqlite.org/amalgamation.html) included in `sqlite` directory.
 
 Link to the [API documentation](https://www.sqlite.org/c3ref/intro.html).
 
@@ -16,15 +13,11 @@ How to build
 
 [CMake](http://cmake.org/) is required for building.
 
-[GNU Awk](https://www.gnu.org/software/gawk/) and [Tcl/Tk](http://www.tcl.tk/) are also required for building,
-Windows users can obtain ready-to-use distributions from [tools_windows_awk](https://github.com/staticlibs/tools_windows_awk)
-and [tools_windows_tcl](https://github.com/staticlibs/tools_windows_tcl) repositories.
-
 To build the library on Windows using Visual Studio 2013 Express run the following commands using
 Visual Studio development command prompt 
 (`C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\Tools\Shortcuts\VS2013 x86 Native Tools Command Prompt`):
 
-    git clone --recursive https://github.com/staticlibs/external_sqlite.git
+    git clone https://github.com/staticlibs/external_sqlite.git
     cd external_sqlite
     mkdir build
     cd build
@@ -41,6 +34,11 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 
 Changelog
 ---------
+
+**2016-10-27**
+
+ * version 3.15.0-1
+ * include SQLite amalgamation in-tree instead of using submodule
 
 **2016-01-16**
 
