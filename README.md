@@ -1,10 +1,13 @@
 SQLite library build for Staticlibs
 ===================================
 
+[![travis](https://travis-ci.org/staticlibs/external_sqlite.svg?branch=master)](https://travis-ci.org/staticlibs/external_sqlite)
+[![appveyor](https://ci.appveyor.com/api/projects/status/github/staticlibs/external_sqlite?svg=true)](https://ci.appveyor.com/project/staticlibs/external-sqlite)
+
 This project is a part of [Staticlibs](http://staticlibs.net/).
 
 This project contains a CMake wrapper for the [sqlite library](https://www.sqlite.org/). 
-SQLite sources [amalgamation](https://sqlite.org/amalgamation.html) included in `sqlite` directory.
+SQLite sources [amalgamation](https://sqlite.org/amalgamation.html) included inside `sqlite` directory.
 
 Link to the [API documentation](https://www.sqlite.org/c3ref/intro.html).
 
@@ -34,6 +37,11 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 
 Changelog
 ---------
+
+**2017-12-31**
+
+ * version 3.15.0-2
+ * vs2017 support
 
 **2016-10-27**
 
