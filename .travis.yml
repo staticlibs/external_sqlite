@@ -101,7 +101,7 @@ script:
     $D cat /etc/fedora-release ;
     $D cmake /src/external_sqlite ;
     $D make ;
-    $D rm -rf * ;
+    $D sh -c "rm -rf /root && mkdir /root" ;
     $D cmake /src/external_sqlite/test -DCMAKE_BUILD_TYPE=Release ;
     $D make all test ;
 
