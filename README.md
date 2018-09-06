@@ -38,6 +38,11 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 Changelog
 ---------
 
+**2018-09-06**
+
+ * version 3.15.2-1
+ * update sqlite amalgamation to `3.15.2`
+
 **2017-12-31**
 
  * version 3.15.0-2
